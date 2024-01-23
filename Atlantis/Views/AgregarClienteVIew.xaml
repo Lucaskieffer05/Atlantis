@@ -1,0 +1,102 @@
+﻿<Window x:Class="Atlantis.Views.AgregarClienteVIew"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Atlantis.Recursos"
+        xmlns:viewmodels="clr-namespace:Atlantis.ViewModels"
+        mc:Ignorable="d"
+        Title="AgregarClienteVIew" Height="450" Width="800">
+
+    <Window.Resources>
+        <local:CheckBoxValueToParameterConverter x:Key="Convertidor"/>
+    </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White" Offset="1"/>
+            <GradientStop Color="#FFBDF0F1" Offset="0"/>
+            <GradientStop Color="White" Offset="0.177"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="160"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock VerticalAlignment="Center" 
+                   Text="Agregar Cliente" 
+                   TextWrapping="Wrap" 
+                   HorizontalAlignment="Center" 
+                   FontSize="36" 
+                   FontWeight="Bold" 
+                   FontStyle="Italic" 
+                   FontFamily="Cascadia Mono ExtraLight"
+                   Grid.Row="0"/>
+
+        <StackPanel 
+            Grid.Row="1" 
+            Orientation="Vertical"
+            Width="250">
+            <TextBlock TextWrapping="Wrap" Text="Nombre y Apellido:" FontFamily="Bahnschrift Light Condensed" FontSize="16" Foreground="#FF868686"/>
+            <TextBox Text="{Binding Pago.Cliente.NomApell, Mode=TwoWay}" TextWrapping="Wrap" Width="auto"/>
+
+            <Label Visibility="Visible" Content="{Binding ErrorNomApell, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Foreground="Red"  Height="21" />
+
+            <TextBlock TextWrapping="Wrap" Text="DNI:" FontFamily="Bahnschrift Light Condensed" FontSize="16" Foreground="#FF868686"/>
+            <TextBox Text="{Binding Pago.Cliente.dni, Mode=TwoWay}" TextWrapping="Wrap" Width="auto"/>
+
+            <Label Visibility="Visible" Content="{Binding ErrorDNI, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Foreground="Red"  Height="21" />
+
+            <TextBlock TextWrapping="Wrap" Text="Fecha de Nacimiento:" FontFamily="Bahnschrift Light Condensed" FontSize="16" Foreground="#FF868686"/>
+            <TextBox Text="{Binding Pago.Cliente.fechaNacimiento, Mode=TwoWay}" TextWrapping="Wrap" Width="auto"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+
+            <StackPanel Grid.Column="0"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <CheckBox IsChecked="{Binding Pago.Enero, Converter={StaticResource Convertidor}}" x:Name="checkEnero" Content="Enero" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Febrero, Converter={StaticResource Convertidor}}" x:Name="checkFebrero" Content="Febrero" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Marzo, Converter={StaticResource Convertidor}}" x:Name="checkMarzo" Content="Marzo" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Abril, Converter={StaticResource Convertidor}}" x:Name="checkAbril" Content="Abril" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Mayo, Converter={StaticResource Convertidor}}" x:Name="checkMayo" Content="Mayo" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Junio, Converter={StaticResource Convertidor}}" x:Name="checkJunio" Content="Junio" Margin="0,0,0,0" Height="15" FontSize="15"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                Orientation="Vertical"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <CheckBox IsChecked="{Binding Pago.Julio, Converter={StaticResource Convertidor}}" x:Name="checkJulio" Content="Julio" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Agosto, Converter={StaticResource Convertidor}}" x:Name="checkAgosto" Content="Agosto" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Septiembre, Converter={StaticResource Convertidor}}" x:Name="checkSeptiembre" Content="Septiembre" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Octubre, Converter={StaticResource Convertidor}}" x:Name="checkOctubre" Content="Octubre" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Noviembre, Converter={StaticResource Convertidor}}" x:Name="checkNoviembre" Content="Noviembre" Margin="0,0,0,8" Height="15" FontSize="15"/>
+                <CheckBox IsChecked="{Binding Pago.Diciembre, Converter={StaticResource Convertidor}}" x:Name="checkDiciembre" Content="Diciembre" Margin="0,0,0,0" Height="15" FontSize="15"/>
+            </StackPanel>
+
+        </Grid>
+
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+            <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.AgregarClienteCommand}"
+                Content="Agregar" Padding="10,5,10,5" FontSize="12" Height="33" Width="76" Background="#FFD6FFAF"/>
+            <Button Content="Cerrar" Padding="10,5,10,5" FontSize="12" Margin="25,0,25,0" Click="CerrarVentana" Width="67" Background="#FFFFD3D3"/>
+
+        </StackPanel>
+
+    </Grid>
+</Window>

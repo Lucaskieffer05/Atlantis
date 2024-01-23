@@ -1,0 +1,495 @@
+﻿<Window x:Class="Atlantis.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Atlantis.Views"
+        xmlns:viewmodels="clr-namespace:Atlantis.ViewModels"
+        xmlns:controlusuario="clr-namespace:Atlantis.ControlUsuario"
+        xmlns:recurso="clr-namespace:Atlantis.Recursos"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Title="Ventana Principal" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown">
+
+    
+
+    <Window.Resources>
+        <Style x:Key="StyleTextBoxBuscar" TargetType="TextBox">
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Tag" Value="Buscar"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Text" Value="{Binding Buscarcliente, UpdateSourceTrigger=PropertyChanged}"/>
+                </Trigger>
+                <Trigger Property="IsFocused" Value="False">
+                    <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <recurso:CollectionEmptyToVisibilityConverter x:Key="CollectionEmptyToVisibilityConverter"/>
+
+        <ControlTemplate x:Key="MiBotonTemplate" TargetType="Button" >
+            <Border Width="18" Height="18" CornerRadius="9"
+            Background="{TemplateBinding Background}">
+                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Border>
+        </ControlTemplate>
+
+    </Window.Resources>
+
+    <Border CornerRadius="30">
+        <Border.Background>
+            <ImageBrush ImageSource="/Images/Fondo3.jpg"/>
+        </Border.Background>
+        <Border CornerRadius="30" >
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.4">
+                    <GradientStop Color="White" Offset="1"/>
+                    <GradientStop Color="#FFE8DAF9" Offset="0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+
+
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="0.22*" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Atlantis" 
+                               Foreground="White"
+                               FontSize="16"
+                               FontFamily="Cascadia Mono"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="30,0,0,0"/>
+
+                    <Button x:Name="btnMinimizar"
+                            Template="{StaticResource MiBotonTemplate}"
+                            Content="-"
+                            BorderThickness="0"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="1"
+                            Click="btnMinimizar_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#82E800"/>
+                                <Style.Triggers >
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#CAE5A7"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button x:Name="btnCerrar"
+                            Template="{StaticResource MiBotonTemplate}"
+                            Content="x"
+                            BorderThickness="0"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Grid.Column="2"
+                            Click="btnCerrar_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#ff5254"/>
+                                <Style.Triggers >
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#fbb498"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+
+                    <TextBox Style="{StaticResource StyleTextBoxBuscar}" TextWrapping="Wrap" Width="230" Height="30" FontSize="16" VerticalContentAlignment="Center"/>
+
+                    <Button x:Name="btnAgregarCliente"
+                            Content="Agregar Cliente"
+                            Grid.Row="1"
+                            Width="100"
+                            Height="30"
+                            Margin="10,10,10,10"
+                            Command="{Binding AbrirAgregarClienteCommand}"/>
+                    <Button x:Name="Otroboton"
+                            Visibility="{Binding Pagos, Converter={StaticResource CollectionEmptyToVisibilityConverter}}"
+                            Content="Importar Clientes Anteriores"
+                            Command="{Binding ImportarClientesCommand}"
+                            Grid.Row="1"
+                            Width="166"
+                            Height="30"
+                            Margin="10,10,10,10"/>
+
+                    <ComboBox ItemsSource="{Binding Anios}"
+                        DisplayMemberPath="Anio"
+                        SelectedValuePath="Id_anio"
+                        SelectedValue="{Binding AnioSeleccionado.Id_anio, Mode=TwoWay}"
+                        Height="25" SelectedItem="{Binding AnioSeleccionado}" FontSize="16" VerticalContentAlignment="Center">
+                    </ComboBox>
+
+                    <Button Content="Exportar Excel"
+                            Grid.Row="1"
+                            Width="100"
+                            Height="35"
+                            Margin="10,10,10,10" 
+                            Command="{Binding ExportarExelCommand}" CommandParameter="{Binding ElementName=clientesDataGrid}"/>
+                    
+                    <Button Content="Exportar Captura"
+                            Grid.Row="1"
+                            Width="100"
+                            Height="35"
+                            Margin="10,10,10,10" 
+                            Command="{Binding ExportarGrillaCommand}" CommandParameter="{Binding ElementName=clientesDataGrid}"/>
+
+                </StackPanel>
+
+                <DataGrid ItemsSource="{Binding Pagos}" 
+                          AutoGenerateColumns="False" 
+                          Grid.Row="2"
+                          CellStyle="{StaticResource DataGridCellStyle}"
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          FontSize="16"
+                          Style="{StaticResource FondoDataGrid}"
+                          RowHeight="40" SelectionChanged="DataGrid_SelectionChanged"
+                          CanUserAddRows="False"
+                          x:Name="clientesDataGrid"
+                          Margin="10,0,10,30">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="3*" Binding="{Binding Cliente.NomApell}"  Header="Nombre y Apellido"/>
+                        <DataGridTemplateColumn Header="Enero" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Enero}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Enero}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+                        <DataGridTemplateColumn Header="Febrero" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Febrero}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Febrero}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+                        <DataGridTemplateColumn Header="Marzo" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Marzo}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Marzo}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Abril" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Abril}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Abril}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Mayo" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Mayo}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Mayo}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Junio" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Junio}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Junio}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Julio" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Julio}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Julio}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Agosto" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Agosto}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Agosto}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Septiembre" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Septiembre}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Septiembre}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Octubre" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Octubre}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Octubre}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Noviembre" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Noviembre}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Noviembre}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Diciembre" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Diciembre}" Value="1">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Image Source="{StaticResource ImagenSi}" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Diciembre}" Value="-">
+                                                        <Setter Property="Content" Value="-"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <controlusuario:DetallesCliente DataContext="{Binding DetallesClienteViewModel}" 
+                                                Visibility="{Binding MostrarDetalles}"
+                                                Grid.Row="1"
+                                                Grid.RowSpan="3" />
+
+            </Grid>
+        </Border>
+    </Border>
+</Window>
